@@ -15,11 +15,3 @@ class Book(models.Model):
     def _str_(self):
         return self.title
 
-class Bookmark(models.Model):
-    position = models.IntegerField()
-    book = models.ForeignKey(Book, on_delete=models.CASCADE)
-    owner = models.ForeignKey('auth.User', related_name='bookmarks', on_delete=models.CASCADE)
-    created = models.DateTimeField(auto_now_add=True)
-
-    def _str_(self):
-        return self.title
