@@ -27,7 +27,17 @@ class BookList(generics.ListCreateAPIView):
     ordering = ['title']
 
     def get_queryset(self):
-        return Book.objects.filter(owner=self.request.user)
+        queryset = Book.objects.filter(owner=self.request.user)
+        show = self.request.query_params.get('show', None)
+
+        if show == 'all':
+            queryset = queryset.filter(status='completed') | queryset.filter(status='uncompleted')
+        elif show == 'completed':
+            queryset = queryset.filter(status='completed')
+        else:
+            queryset = queryset.filter(status='uncompleted')
+
+        return queryset
     
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
